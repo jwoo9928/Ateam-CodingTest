@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request, response } from "express";
-import {getPosition, getPositions} from "./mapTools";
+import { arrayBuffer } from "stream/consumers";
+import {getPosition, getPositions,ShopCalDistance} from "./mapTools";
 
 const mapList = require('../../stores.json');
 
@@ -39,17 +40,39 @@ class MapController {
     }
 
 
-    public getStoreRadius = async (req: Request, res: Response, next: NextFunction) => {
+    public ShopInRadius = async (req: Request, res: Response, next: NextFunction) => {
         const { body: { postcode, radius } } = req;
-        const postcodeArr = [];
+        const postcodeArr = [],storesArr = [], finalResult = [];
         mapList.forEach(element => {
             postcodeArr.push(element.postcode);
         });
         const positionArr = await getPositions(postcodeArr);
         const inputPosition = await getPosition(postcode);
 
-        res.status(200).json(inputPosition);
-        // console.log(positionArr);
+        positionArr.forEach(element => {
+            let distance = ShopCalDistance(inputPosition,element);
+            if(distance <= radius) {
+                mapList.filter(store => {
+                    if (store.postcode== element.postcode)
+                        return storesArr.push({
+                            "name":store.name,
+                            "postcode": store.postcode,
+                            "latitude" : element.latitude,
+                        });
+                })
+            }
+        })
+        const closeNorth = storesArr.sort(function(a,b) {
+            return b.latitude -  a.latitude;
+        })
+        closeNorth.forEach((element)=> {
+            finalResult.push({
+                "name":element.name,
+                "postcode": element.postcode
+            })
+        })
+
+        res.status(200).json(finalResult);
     }
 }
 
