@@ -5,7 +5,9 @@ const MapRouter = express.Router();
 
 
 MapRouter.get("/getlist",MapController.getMaps);
-MapRouter.get("/getStore/:name",MapController.getStore)
+MapRouter.get("/getstore/:name",MapController.getStore);
+MapRouter.get("/getposition/:postcode",MapController.getposition);
+MapRouter.post("/getstoreradius",MapController.getStoreRadius);
 
 
 export = MapRouter;
