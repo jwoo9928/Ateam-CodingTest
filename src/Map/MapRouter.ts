@@ -5,6 +5,7 @@ const MapRouter = express.Router();
 
 
 MapRouter.get("/getlist",MapController.getMaps);
+MapRouter.get("/getStore/:name",MapController.getStore)
 
 
 export = MapRouter;
