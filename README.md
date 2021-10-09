@@ -1,7 +1,3 @@
-# Untitled
-
-Created: October 9, 2021 5:58 PM
-Last Edited Time: October 9, 2021 6:21 PM
 
 # Provide answers for the following questions with your submission
 
